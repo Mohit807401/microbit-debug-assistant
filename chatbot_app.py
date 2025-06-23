@@ -15,7 +15,7 @@ llm = pipeline("text2text-generation", model="google/flan-t5-base", device=-1)
 # Streamlit UI
 st.set_page_config(page_title="Microbit Debugging Assistant", page_icon="🛠️")
 st.title("🛠️ Microbit Debugging Assistant")
-st.markdown("Ask me any question related to Microbit issues from the PG Debug Sheet!")
+st.markdown("Ask me any question related to Microbit issues ")
 
 query = st.text_input("🔍 Type your question here:")
 
