@@ -1,2 +1,4 @@
+microbit_chroma_db/
 microbit_faiss_db/
+*.sqlite3
 *.pkl
