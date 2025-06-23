@@ -1,5 +1,6 @@
-langchain
-faiss-cpu
-sentence-transformers
-transformers
 streamlit
+langchain
+langchain-community
+chromadb
+sentence-transformers
+python-docx
