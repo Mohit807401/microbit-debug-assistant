@@ -59,17 +59,30 @@ from langchain_community.vectorstores import FAISS
 
 def build_vector_db(cases):
     docs = []
-    for case in cases:
-        combined = f"{case['title']}\nSymptoms: {'; '.join(case.get('symptoms', []))}\nCauses: {'; '.join(case.get('causes', []))}\nSolutions: {'; '.join(case.get('solutions', []))}"
+    for i, case in enumerate(cases):
+        if "title" not in case:
+            print(f"⚠️ Skipping case #{i} due to missing title")
+            continue
+
+        combined = (
+            f"{case['title']}\n"
+            f"Symptoms: {'; '.join(case.get('symptoms', []))}\n"
+            f"Causes: {'; '.join(case.get('causes', []))}\n"
+            f"Solutions: {'; '.join(case.get('solutions', []))}"
+        )
         docs.append(combined)
+
+    if not docs:
+        raise ValueError("No valid cases to build vector DB.")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     texts = splitter.split_text("\n".join(docs))
 
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vectorstore = FAISS.from_texts(texts, embedding=embedding)
+    vectorstore = FAISS.from_texts(texts, embedding)
     vectorstore.save_local("microbit_faiss_db")
     print("✅ Vector DB created and saved!")
+
 
 
 
