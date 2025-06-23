@@ -1,7 +1,7 @@
 from docx import Document
 import json
 import re
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import os
 
@@ -55,29 +55,22 @@ def extract_cases(text_blocks):
 
 
 # Step 3: Convert to chunks and save to FAISS
+from langchain_community.vectorstores import FAISS
+
 def build_vector_db(cases):
     docs = []
-    skipped = 0
-
-    for i, case in enumerate(cases):
-        if 'title' not in case:
-            print(f"⚠️ Skipping case #{i} due to missing title")
-            skipped += 1
-            continue
-
+    for case in cases:
         combined = f"{case['title']}\nSymptoms: {'; '.join(case.get('symptoms', []))}\nCauses: {'; '.join(case.get('causes', []))}\nSolutions: {'; '.join(case.get('solutions', []))}"
         docs.append(combined)
-
-    print(f"📦 Cases prepared for vectorization: {len(docs)}")
-    print(f"🚫 Skipped malformed cases: {skipped}")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     texts = splitter.split_text("\n".join(docs))
 
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vectorstore = Chroma.from_texts(texts, embedding=embedding, persist_directory="microbit_chroma_db")
-    vectorstore.persist()
+    vectorstore = FAISS.from_texts(texts, embedding=embedding)
+    vectorstore.save_local("microbit_faiss_db")
     print("✅ Vector DB created and saved!")
+
 
 
 if __name__ == "__main__":
