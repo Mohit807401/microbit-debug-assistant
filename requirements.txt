@@ -1,7 +1,7 @@
 streamlit
 langchain
 langchain-community
-chromadb
+chromadb[chromadb]  # full Chroma deps
 sentence-transformers
 python-docx
 protobuf<4.23.0
