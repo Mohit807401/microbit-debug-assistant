@@ -4,3 +4,4 @@ langchain-community
 chromadb
 sentence-transformers
 python-docx
+protobuf<4.23.0
