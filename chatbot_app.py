@@ -1,11 +1,11 @@
 import streamlit as st
 from transformers import pipeline
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # Load the vector database
 embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-vectorstore = Chroma(persist_directory="microbit_chroma_db", embedding_function=embedding)
+vectorstore = FAISS.load_local("microbit_faiss_db", embeddings=embedding, allow_dangerous_deserialization=True)
 retriever = vectorstore.as_retriever()
 
 # Load the HuggingFace model
