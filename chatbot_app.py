@@ -9,7 +9,8 @@ vectorstore = FAISS.load_local("microbit_faiss_db", embeddings=embedding, allow_
 retriever = vectorstore.as_retriever()
 
 # Load the HuggingFace model
-llm = pipeline("text2text-generation", model="google/flan-t5-base")
+llm = pipeline("text2text-generation", model="google/flan-t5-base", device=-1)
+
 
 # Streamlit UI
 st.set_page_config(page_title="Microbit Debugging Assistant", page_icon="🛠️")
